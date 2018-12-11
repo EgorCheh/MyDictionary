@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">My Dictionary</string>
+    <string name="btnOpenDictionary">Топ 5000</string>
+    <string name="btnOpenNewWords">Добавить новое слово Топ 5000</string>
+    <string name="btnCheck">Проверить</string>
+    <string name="btnShowWord">Забыл слово</string>
+    <string name="toastCorrectly">Верно</string>
+    <string name="toastWrong">Неверно</string>
+    <string name="toastRepeat">Осталось повторить</string>
+    <string name="btnNextWord">Следущее слово</string>
+    <string name="btnOpenTraining">Тренировка слов</string>
+    <string name="btnOpenStudy">Изучаемые слова</string>
+    <string name="toastTrainingEnd">Тренировка закончена</string>
+    <string name="buttAddYandex">Найти</string>
+    <string name="etRussWord">Русский</string>
+    <string name="etEngWord">Английский</string>
+    <string name="btnOpenYandex">Добавить слово</string>
+    <string name="tvTranslation">Перевод:</string>
+    <string name="btnAddWordOnStudy">Добавить</string>
+    <string name="toastAddWord">Слово Добавлено</string>
+</resources>
