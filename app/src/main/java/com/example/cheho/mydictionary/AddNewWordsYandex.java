@@ -32,13 +32,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AddNewWordsYandex extends AppCompatActivity  {
 
+    final String LOG_TAG = "myLogs";
     private Button btnAdd,btnAddNewWord;
     private EditText etEngWord,etRusWord;
     private Gson gson = new GsonBuilder().create();
     private final String KEY = "trnsl.1.1.20180723T103924Z.4e5559e0a3b45ee4.800a777f9ceb4003f58fd2bc387d15bddeffd2fe";
     private RequestAPI req;
     private String text,lang;
-   private Map<String, String> map;
+    private Map<String, String> map;
     private TextView tvSetText;
     private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
@@ -63,6 +64,8 @@ public class AddNewWordsYandex extends AppCompatActivity  {
                 if (!etRusWord.getText().toString().equals(""))
                     etEngWord.setEnabled(false);
                 else etEngWord.setEnabled(true);
+                btnAddNewWord.setEnabled(false);
+                tvSetText.setText("");
             }
         });
 
@@ -76,14 +79,16 @@ public class AddNewWordsYandex extends AppCompatActivity  {
                 if (!etEngWord.getText().toString().equals(""))
                     etRusWord.setEnabled(false);
                 else etRusWord.setEnabled(true);
+                btnAddNewWord.setEnabled(false);
+                tvSetText.setText("");
             }
         });
 
         btnAddNewWord=findViewById(R.id.btnAddWordOnStudy);
+        btnAddNewWord.setEnabled(false);
         btnAddNewWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),R.string.toastAddWord,Toast.LENGTH_SHORT).show();
                 ContentValues cv = new ContentValues();
                if(etEngWord.getText().toString().equals(""))
                {
@@ -95,7 +100,12 @@ public class AddNewWordsYandex extends AppCompatActivity  {
                         cv.put("word",etEngWord.getText().toString() );
                         cv.put("translation",tvSetText.getText().toString() );
                     }
-                mDb.insert("study", null, cv);
+                if(!checkHasWord(cv.get("word").toString()))
+                {
+                    mDb.insert("study", null, cv);
+                    Toast.makeText(getApplicationContext(),R.string.toastAddWord,Toast.LENGTH_SHORT).show();
+                }
+                else Toast.makeText(getApplicationContext(),getString(R.string.ToastCheckForInsert),Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -180,13 +190,36 @@ public class AddNewWordsYandex extends AppCompatActivity  {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             for (Map.Entry e : map.entrySet()) {
-                Log.d("MYY", " Key " + e.getKey() + "  Value " + e.getValue());
+                Log.d("Yandex", " Key " + e.getKey() + "  Value " + e.getValue());
                 if(e.getKey().toString().equals("text"))
-                    tvSetText.setText(e.getValue().toString());
+                {
+                    tvSetText.setText(e.getValue().toString().substring(1,e.getValue().toString().length()-1));
+                    btnAddNewWord.setEnabled(true);
+                }
             }
 
         }
+
+
     }
 
+    private boolean checkHasWord(String word){
+        Cursor cursorCheck = mDb.rawQuery("SELECT * FROM study", null);
+        cursorCheck.moveToFirst();
 
+
+        while (!cursorCheck.isAfterLast()) {
+            if(cursorCheck.getString(1).equals(word))
+            {
+                Log.d(LOG_TAG,"_________Has word");
+                cursorCheck.close();
+                return true;
+            }
+
+            cursorCheck.moveToNext();
+        }
+        Log.d(LOG_TAG,"_________No word");
+        cursorCheck.close();
+        return false;
+    }
 }

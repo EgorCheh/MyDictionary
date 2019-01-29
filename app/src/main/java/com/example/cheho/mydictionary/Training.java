@@ -1,6 +1,7 @@
 package com.example.cheho.mydictionary;
 
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -94,6 +95,10 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
                     Toast.makeText(getApplicationContext(), R.string.toastCorrectly, Toast.LENGTH_SHORT).show();
                     if(counterCorrectlyAnswer==3)
                     {
+                        ContentValues cv = new ContentValues();
+                        cv.put("studyLVL",cursor.getInt(3)+1);
+                        cv.put("counter",cursor.getInt(3)+1);
+                        mDb.update("study", cv, "_id=?", new String[]{cursor.getString(0)});
                         setNewWord();
                     }
                     else
@@ -124,6 +129,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
 
         if(!cursor.isAfterLast()) {
 
+              Log.d("Study",cursor.getString(1)+" "+cursor.getString(2)+" "+cursor.getString(3)+" "+cursor.getString(4));
                word = cursor.getString(1);
                tvTranslation.setText(cursor.getString(2));
                toSpeak=word.toString();

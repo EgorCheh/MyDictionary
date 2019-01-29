@@ -18,4 +18,5 @@
     <string name="tvTranslation">Перевод:</string>
     <string name="btnAddWordOnStudy">Добавить</string>
     <string name="toastAddWord">Слово Добавлено</string>
+    <string name="ToastCheckForInsert">Такое слово уже есть</string>
 </resources>
