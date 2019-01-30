@@ -19,6 +19,7 @@ import com.example.cheho.myapplication.R;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class Training extends AppCompatActivity implements View.OnClickListener {
     private TextView tvTranslation;
@@ -29,11 +30,11 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
     private String word;
     private Cursor cursor;
     private int counterCorrectlyAnswer=0;
-    private final String LOG_TAG = "myLogs";
-    private final String KEY_INDEX = "randID";
+    private final String LOG_TAG = "myLogs",KEY_INDEX = "randID";
     private TextToSpeech textToSpeech;
     private int ID;
     private String toSpeak;
+    private Word currentWord;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,13 +74,14 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
 
         cursor = mDb.rawQuery("SELECT * FROM study", null);
 
-        if (savedInstanceState != null) {
-            cursor.moveToPosition( savedInstanceState.getInt(KEY_INDEX,0));}
-        else cursor.moveToFirst();
-        word = cursor.getString(1);
-        tvTranslation.setText(cursor.getString(2));
-        toSpeak=word.toString();
+        if (savedInstanceState != null)
+        {
+            cursor.moveToPosition( savedInstanceState.getInt(KEY_INDEX,0));
 
+
+        }
+        else cursor.moveToFirst();
+        setNewWord();
 
     }
 
@@ -96,9 +98,10 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
                     if(counterCorrectlyAnswer==3)
                     {
                         ContentValues cv = new ContentValues();
-                        cv.put("studyLVL",cursor.getInt(3)+1);
-                        cv.put("counter",cursor.getInt(3)+1);
-                        mDb.update("study", cv, "_id=?", new String[]{cursor.getString(0)});
+                        cv.put("studyLVL",currentWord.getLevel()+1);
+                        cv.put("counter",currentWord.getLevel()+1);
+                        mDb.update("study", cv, "_id=?", new String[]{currentWord.getIDToString()});
+                        counterCorrectlyAnswer=0;
                         setNewWord();
                     }
                     else
@@ -124,19 +127,36 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
 
     private void  setNewWord()
     {
-        cursor.moveToNext();
-        counterCorrectlyAnswer=0;
+        boolean notFoundWord=true;
+        while (!cursor.isAfterLast()&&notFoundWord) {
 
-        if(!cursor.isAfterLast()) {
-
+             if(cursor.getInt(4)<1)
+            {
               Log.d("Study",cursor.getString(1)+" "+cursor.getString(2)+" "+cursor.getString(3)+" "+cursor.getString(4));
-               word = cursor.getString(1);
-               tvTranslation.setText(cursor.getString(2));
-               toSpeak=word.toString();
+              word = cursor.getString(1);
+              tvTranslation.setText(cursor.getString(2));
+              toSpeak=word.toString();
+              currentWord= new Word(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getInt(3),cursor.getInt(4));
+               notFoundWord=false;
+            }
+            cursor.moveToNext();
 
-        }else  Toast.makeText(getApplicationContext(), R.string.toastTrainingEnd, Toast.LENGTH_SHORT).show();
+        }
+
+        if(notFoundWord)
+        {
+            Toast.makeText(getApplicationContext(), R.string.toastTrainingEnd, Toast.LENGTH_SHORT).show();
+            btnCheck.setEnabled(false);
+        }
 
     }
+
+
+
+
+
+
+
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         ID=cursor.getPosition();

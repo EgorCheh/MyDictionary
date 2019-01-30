@@ -51,6 +51,9 @@ public class StudyWords extends AppCompatActivity {
             word.put("ID",  cursor.getString(0));
             word.put("word",  cursor.getString(1));
             word.put("translation",  cursor.getString(2));
+            if(cursor.getInt(4)<1)
+            word.put("day",  "Today");
+            else word.put("day",  cursor.getString(4)+" Days");
             Log.d(LOG_TAG, "_"+word+" "+cursor.getString(3)+" "+cursor.getString(4) );
             words.add(word);
             cursor.moveToNext();
@@ -58,8 +61,8 @@ public class StudyWords extends AppCompatActivity {
         cursor.close();
 
 
-        String[] from = {"ID", "word",  "translation"};
-        int[] to = {R.id.itemTvID, R.id.itemTvWord, R.id.itemTvTranslation};
+        String[] from = {"ID", "word",  "translation","day"};
+        int[] to = {R.id.itemTvID, R.id.itemTvWord, R.id.itemTvTranslation,R.id.itemTvDay};
 
         SimpleAdapter adapter = new SimpleAdapter(this, words, R.layout.adapter_item, from, to);
         ListView listView = (ListView) findViewById(R.id.lvStudy);

@@ -27,5 +27,11 @@
         android:padding="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    <TextView
+        android:id="@+id/itemTvDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp" />
+
 
 </LinearLayout>
