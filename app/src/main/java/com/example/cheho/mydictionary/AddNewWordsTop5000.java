@@ -30,6 +30,7 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
     private final String KEY_INDEX = "randID";
     private TextToSpeech textToSpeech;
     private String toSpeak;
+    private ContentValues cv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +39,8 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
         Button btnCheck = findViewById(R.id.btnCheck);
         Button btnShowWord = findViewById(R.id.btnShowWord);
         etWord=findViewById(R.id.etWord);
+        Button btnAddWord=findViewById(R.id.buttAddWordTop);
+        btnAddWord.setOnClickListener(this);
         Button btnNextWord = findViewById(R.id.btnNextWord);
         btnNextWord.setOnClickListener(this);
         btnCheck.setOnClickListener(this);
@@ -97,6 +100,10 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
             case R.id.btnNextWord:
                 setNewWord();
                 break;
+            case R.id.buttAddWordTop:
+                mDb.insert("study", null, cv);
+                Toast.makeText(getApplicationContext(),R.string.toastAddWord,Toast.LENGTH_SHORT).show();
+                break;
                 default:
                 break;
         }
@@ -114,10 +121,9 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
 
         if(!checkHasWord())
         {
-        ContentValues cv = new ContentValues();
+        cv = new ContentValues();
         cv.put("word", cursor.getString(1));
         cv.put("translation", cursor.getString(2));
-        mDb.insert("study", null, cv);
         toSpeak= word;
         tvTranslation.setText(cursor.getString(2));
         } else
