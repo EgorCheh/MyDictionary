@@ -1,10 +1,9 @@
 package com.example.cheho.mydictionary;
 
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -16,13 +15,11 @@ import java.util.HashMap;
 
 public class Dictionary extends AppCompatActivity {
 
-    private DatabaseHelper mDBHelper;
-    private SQLiteDatabase mDb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
-        mDBHelper = new DatabaseHelper(this);
+        DatabaseHelper mDBHelper = new DatabaseHelper(this);
 
         try {
             mDBHelper.updateDataBase();
@@ -30,14 +27,10 @@ public class Dictionary extends AppCompatActivity {
             throw new Error("UnableToUpdateDatabase");
         }
 
-        try {
-            mDb = mDBHelper.getWritableDatabase();
-        } catch (SQLException mSQLException) {
-            throw mSQLException;
-        }
+        SQLiteDatabase mDb = mDBHelper.getWritableDatabase();
 
 
-        ArrayList<HashMap<String, Object>> words = new ArrayList<HashMap<String, Object>>();
+        ArrayList<HashMap<String, Object>> words = new ArrayList<>();
         HashMap<String, Object> word;
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM words", null);
@@ -45,8 +38,8 @@ public class Dictionary extends AppCompatActivity {
 
 
         while (!cursor.isAfterLast()) {
-            word = new HashMap<String, Object>();
-            word.put("ID",  cursor.getString(0));
+            word = new HashMap<>();
+         //   word.put("ID",  cursor.getString(0));
             word.put("translation",  cursor.getString(2));
             word.put("word",  cursor.getString(1));
 
@@ -56,12 +49,12 @@ public class Dictionary extends AppCompatActivity {
         cursor.close();
 
        //___________________________________________________________________________________________ ????????????????????
-        String[] from = {"ID", "word",  "translation"};
-        int[] to = {R.id.itemTvID, R.id.itemTvWord, R.id.itemTvTranslation};
+        String[] from = { "word",  "translation"};
+        int[] to = { R.id.itemTvWord, R.id.itemTvTranslation};
 
 
         SimpleAdapter adapter = new SimpleAdapter(this, words, R.layout.adapter_item, from, to);
-        ListView listView = (ListView) findViewById(R.id.lvDictionary);
+        ListView listView = findViewById(R.id.lvDictionary);
         listView.setAdapter(adapter);
     }
 }

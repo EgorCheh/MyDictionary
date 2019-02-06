@@ -2,11 +2,10 @@ package com.example.cheho.mydictionary;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,9 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClickListener {
     private TextView tvTranslation;
-    private Button btnCheck, btnShowWord, btnNextWord;
     private EditText etWord;
-    private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
     private String word;
     private Cursor cursor;
@@ -38,10 +35,10 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_words);
         tvTranslation=findViewById(R.id.tvTranslation);
-        btnCheck=findViewById(R.id.btnCheck);
-        btnShowWord=findViewById(R.id.btnShowWord);
+        Button btnCheck = findViewById(R.id.btnCheck);
+        Button btnShowWord = findViewById(R.id.btnShowWord);
         etWord=findViewById(R.id.etWord);
-        btnNextWord=findViewById(R.id.btnNextWord);
+        Button btnNextWord = findViewById(R.id.btnNextWord);
         btnNextWord.setOnClickListener(this);
         btnCheck.setOnClickListener(this);
         btnShowWord.setOnClickListener(this);
@@ -56,7 +53,7 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
             }
         });
 
-        mDBHelper = new DatabaseHelper(this);
+        DatabaseHelper mDBHelper = new DatabaseHelper(this);
 
         try {
             mDBHelper.updateDataBase();
@@ -64,11 +61,7 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
             throw new Error("UnableToUpdateDatabase");
         }
 
-        try {
-            mDb = mDBHelper.getWritableDatabase();
-        } catch (SQLException mSQLException) {
-            throw mSQLException;
-        }
+        mDb = mDBHelper.getWritableDatabase();
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
@@ -93,7 +86,7 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
                 if(word.equals(etWord.getText().toString()))
                 {textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH,null);
                     Toast.makeText(getApplicationContext(), R.string.toastCorrectly, Toast.LENGTH_SHORT).show();}
-                else {textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH,null);
+                else {
                     Toast.makeText(getApplicationContext(), R.string.toastWrong, Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -125,9 +118,8 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
         cv.put("word", cursor.getString(1));
         cv.put("translation", cursor.getString(2));
         mDb.insert("study", null, cv);
-        toSpeak=word.toString();
+        toSpeak= word;
         tvTranslation.setText(cursor.getString(2));
-        textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH,null);
         } else
             setNewWord();
 

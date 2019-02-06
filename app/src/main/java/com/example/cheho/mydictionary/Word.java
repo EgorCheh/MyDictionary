@@ -7,7 +7,7 @@ public class Word {
     private int level;
     private int counter;
 
-    public Word(int id, String word, String translation, int level, int counter) {
+    Word(int id, String word, String translation, int level, int counter) {
         this.id = id;
         this.word = word;
         this.translation = translation;
@@ -18,9 +18,8 @@ public class Word {
     public int getId() {
         return id;
     }
-    public String getIDToString() {
-        String idString = String.valueOf(id);
-        return idString;
+     String getIDToString() {
+         return String.valueOf(id);
     }
 
     public String getWord() {
@@ -31,7 +30,7 @@ public class Word {
         return translation;
     }
 
-    public int getLevel() {
+     int getLevel() {
         return level;
     }
 

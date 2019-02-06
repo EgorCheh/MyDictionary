@@ -3,11 +3,10 @@ package com.example.cheho.mydictionary;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,20 +18,17 @@ import com.example.cheho.myapplication.R;
 
 import java.io.IOException;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class Training extends AppCompatActivity implements View.OnClickListener {
     private TextView tvTranslation;
-    private Button btnCheck, btnShowWord;
+    private Button btnCheck;
     private EditText etWord;
-    private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
     private String word;
     private Cursor cursor;
     private int counterCorrectlyAnswer=0;
-    private final String LOG_TAG = "myLogs",KEY_INDEX = "randID";
+    private final String KEY_INDEX = "randID";
     private TextToSpeech textToSpeech;
-    private int ID;
     private String toSpeak;
     private Word currentWord;
     @Override
@@ -41,8 +37,9 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_training);
         tvTranslation=findViewById(R.id.tvTranslationTraining);
         btnCheck=findViewById(R.id.btnCheckTraining);
-        btnShowWord=findViewById(R.id.btnShowWordTraining);
+        Button btnShowWord = findViewById(R.id.btnShowWordTraining);
         etWord=findViewById(R.id.etWordTraining);
+        String LOG_TAG = "myLogs";
         Log.d(LOG_TAG,"_______ONCREATE________");
         btnCheck.setOnClickListener(this);
         btnShowWord.setOnClickListener(this);
@@ -58,7 +55,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
             }
         });
 
-        mDBHelper = new DatabaseHelper(this);
+        DatabaseHelper mDBHelper = new DatabaseHelper(this);
 
         try {
             mDBHelper.updateDataBase();
@@ -66,11 +63,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
             throw new Error("UnableToUpdateDatabase");
         }
 
-        try {
-            mDb = mDBHelper.getWritableDatabase();
-        } catch (SQLException mSQLException) {
-            throw mSQLException;
-        }
+        mDb = mDBHelper.getWritableDatabase();
 
         cursor = mDb.rawQuery("SELECT * FROM study", null);
 
@@ -135,7 +128,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
               Log.d("Study",cursor.getString(1)+" "+cursor.getString(2)+" "+cursor.getString(3)+" "+cursor.getString(4));
               word = cursor.getString(1);
               tvTranslation.setText(cursor.getString(2));
-              toSpeak=word.toString();
+              toSpeak= word;
               currentWord= new Word(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getInt(3),cursor.getInt(4));
                notFoundWord=false;
             }
@@ -159,7 +152,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
 
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        ID=cursor.getPosition();
+        int ID = cursor.getPosition();
         savedInstanceState.putInt(KEY_INDEX, ID);    }
 
         public void onPause()

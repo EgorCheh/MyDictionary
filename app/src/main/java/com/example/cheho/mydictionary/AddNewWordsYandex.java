@@ -2,11 +2,10 @@ package com.example.cheho.mydictionary;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,17 +32,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AddNewWordsYandex extends AppCompatActivity  {
 
     final String LOG_TAG = "myLogs";
-    private Button btnAdd,btnAddNewWord;
+    private Button btnAddNewWord;
     private EditText etEngWord,etRusWord;
     private Gson gson = new GsonBuilder().create();
-    private final String KEY = "trnsl.1.1.20180723T103924Z.4e5559e0a3b45ee4.800a777f9ceb4003f58fd2bc387d15bddeffd2fe";
     private RequestAPI req;
     private String text,lang;
     private Map<String, String> map;
     private TextView tvSetText;
-    private DatabaseHelper mDBHelper;
     private SQLiteDatabase mDb;
-    private Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +105,7 @@ public class AddNewWordsYandex extends AppCompatActivity  {
 
             }
         });
-        btnAdd = findViewById(R.id.buttAddYandex);
+        Button btnAdd = findViewById(R.id.buttAddYandex);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,7 +129,7 @@ public class AddNewWordsYandex extends AppCompatActivity  {
                 .build();
         req = retrofit.create(RequestAPI.class);
 
-        mDBHelper = new DatabaseHelper(this);
+        DatabaseHelper mDBHelper = new DatabaseHelper(this);
 
         try {
             mDBHelper.updateDataBase();
@@ -141,11 +137,7 @@ public class AddNewWordsYandex extends AppCompatActivity  {
             throw new Error("UnableToUpdateDatabase");
         }
 
-        try {
-            mDb = mDBHelper.getWritableDatabase();
-        } catch (SQLException mSQLException) {
-            throw mSQLException;
-        }
+        mDb = mDBHelper.getWritableDatabase();
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
@@ -168,6 +160,7 @@ public class AddNewWordsYandex extends AppCompatActivity  {
 
 
                 Map<String, String> mapJson = new HashMap<>();
+                String KEY = "trnsl.1.1.20180723T103924Z.4e5559e0a3b45ee4.800a777f9ceb4003f58fd2bc387d15bddeffd2fe";
                 mapJson.put("key", KEY);
                 mapJson.put("text", text);
                 mapJson.put("lang", lang);

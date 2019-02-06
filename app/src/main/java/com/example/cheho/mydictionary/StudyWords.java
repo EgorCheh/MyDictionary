@@ -1,10 +1,9 @@
 package com.example.cheho.mydictionary;
 
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -18,13 +17,12 @@ import java.util.HashMap;
 public class StudyWords extends AppCompatActivity {
 
     final String LOG_TAG = "myLogs";
-    private DatabaseHelper mDBHelper;
-    private SQLiteDatabase mDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_study_words);
-        mDBHelper = new DatabaseHelper(this);
+        DatabaseHelper mDBHelper = new DatabaseHelper(this);
 
         try {
             mDBHelper.updateDataBase();
@@ -32,14 +30,11 @@ public class StudyWords extends AppCompatActivity {
             throw new Error("UnableToUpdateDatabase");
         }
 
-        try {
-            mDb = mDBHelper.getWritableDatabase();
-        } catch (SQLException mSQLException) {
-            throw mSQLException;
-        }
+        SQLiteDatabase mDb;
+        mDb = mDBHelper.getWritableDatabase();
 
 
-        ArrayList<HashMap<String, Object>> words = new ArrayList<HashMap<String, Object>>();
+        ArrayList<HashMap<String, Object>> words = new ArrayList<>();
         HashMap<String, Object> word;
 
         Cursor cursor = mDb.rawQuery("SELECT * FROM study", null);
@@ -47,8 +42,7 @@ public class StudyWords extends AppCompatActivity {
 
 
         while (!cursor.isAfterLast()) {
-            word = new HashMap<String, Object>();
-            word.put("ID",  cursor.getString(0));
+            word = new HashMap<>();
             word.put("word",  cursor.getString(1));
             word.put("translation",  cursor.getString(2));
             if(cursor.getInt(4)<1)
@@ -61,11 +55,11 @@ public class StudyWords extends AppCompatActivity {
         cursor.close();
 
 
-        String[] from = {"ID", "word",  "translation","day"};
-        int[] to = {R.id.itemTvID, R.id.itemTvWord, R.id.itemTvTranslation,R.id.itemTvDay};
+        String[] from = { "word",  "translation","day"};
+        int[] to = { R.id.itemTvWord, R.id.itemTvTranslation,R.id.itemTvDay};
 
         SimpleAdapter adapter = new SimpleAdapter(this, words, R.layout.adapter_item, from, to);
-        ListView listView = (ListView) findViewById(R.id.lvStudy);
+        ListView listView = findViewById(R.id.lvStudy);
         listView.setAdapter(adapter);
     }
 }
