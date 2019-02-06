@@ -26,9 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private SharedPreferences sharedPreferences;
-    private final String Day="Day";
-    private final String Month="Month";
-    private final String Year="Year";
+    private final String Time="getTime";
     private Date currDate =new Date();
     private int daysDiff;
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -61,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(!identicalDates())
 
         {
+            Log.d("Datt", "upDating");
         Cursor cursor = mDb.rawQuery("SELECT * FROM study", null);
         cursor.moveToFirst();
 
@@ -110,9 +109,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     void saveDate() {
         sharedPreferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor ed = sharedPreferences.edit();
-        ed.putInt(Day,currDate.getDate());
-        ed.putInt(Month,currDate.getMonth());
-        ed.putInt(Year,currDate.getYear());
+        ed.putString(Time,String.valueOf(currDate.getTime()));
+
+
         ed.apply();
 
     }
@@ -120,17 +119,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
    private boolean identicalDates() {
         sharedPreferences = getPreferences(MODE_PRIVATE);
 
-        Log.d("Datt","curr  day "+currDate.getDate()+"  month "+currDate.getMonth()+"  year "+currDate.getYear());
-        Log.d("Datt","shared  day "+sharedPreferences.getInt(Day,-1)+"  month "+sharedPreferences.getInt(Month,-1)+"  year"+sharedPreferences.getInt(Year,-1));
-
-       if(-1==sharedPreferences.getInt(Day,-1)&&-1==sharedPreferences.getInt(Month,-1)&&-1==sharedPreferences.getInt(Year,-1))
+       if(sharedPreferences.getString(Time,"-1").equals("-1"))
+       {
+           Log.d("Datt","First start");
            return true;
-       Date past = new Date(sharedPreferences.getInt(Year,-1), sharedPreferences.getInt(Month,-1), sharedPreferences.getInt(Day,-1));
-       daysDiff = Days.daysBetween(new DateTime(past), new DateTime(currDate)).getDays();
+       }
+       Date sharDate = new Date(Long.parseLong(sharedPreferences.getString(Time,"-1")));
+
+       Log.d("Datt","shar  "+sharedPreferences.getString(Time,"null")+"   date"+sharDate.toString());
+       Log.d("Datt","curr  "+currDate.getTime()+"  date"+currDate.toString());
+
+
+       daysDiff = Days.daysBetween(new DateTime(sharDate), new DateTime(currDate)).getDays();
+
        Log.d("Datt","diff  "+daysDiff);
+
        if(daysDiff==0)
-        return true;
-        else return false;
+       { return true;}
+        else {return false;}
 
     }
 
