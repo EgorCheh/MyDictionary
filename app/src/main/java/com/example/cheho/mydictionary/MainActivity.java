@@ -111,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences.Editor ed = sharedPreferences.edit();
         ed.putString(Time,String.valueOf(currDate.getTime()));
 
-
         ed.apply();
 
     }
