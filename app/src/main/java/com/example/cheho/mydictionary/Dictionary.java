@@ -15,6 +15,8 @@ import java.util.HashMap;
 
 public class Dictionary extends AppCompatActivity {
 
+    private SQLiteDatabase mDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +29,8 @@ public class Dictionary extends AppCompatActivity {
             throw new Error("UnableToUpdateDatabase");
         }
 
-        SQLiteDatabase mDb = mDBHelper.getWritableDatabase();
-
+        int imageDone = R.drawable.ic_action_check_word;
+         mDb = mDBHelper.getWritableDatabase();
 
         ArrayList<HashMap<String, Object>> words = new ArrayList<>();
         HashMap<String, Object> word;
@@ -36,25 +38,42 @@ public class Dictionary extends AppCompatActivity {
         Cursor cursor = mDb.rawQuery("SELECT * FROM words", null);
         cursor.moveToFirst();
 
-
+        int img;
         while (!cursor.isAfterLast()) {
             word = new HashMap<>();
-         //   word.put("ID",  cursor.getString(0));
+
             word.put("translation",  cursor.getString(2));
             word.put("word",  cursor.getString(1));
 
+            img =(haveWord(cursor.getString(1)))? imageDone : 0;
+            word.put("image",  img);
             words.add(word);
             cursor.moveToNext();
         }
         cursor.close();
 
-       //___________________________________________________________________________________________ ????????????????????
-        String[] from = { "word",  "translation"};
-        int[] to = { R.id.itemTvWord, R.id.itemTvTranslation};
+
+        String[] from = { "word",  "translation","image"};
+        int[] to = { R.id.itemTvWord, R.id.itemTvTranslation,R.id.itemImg};
 
 
         SimpleAdapter adapter = new SimpleAdapter(this, words, R.layout.adapter_item, from, to);
         ListView listView = findViewById(R.id.lvDictionary);
         listView.setAdapter(adapter);
+    }
+    boolean haveWord (String word)
+    {
+        Cursor cursorStudy = mDb.rawQuery("SELECT * FROM study", null);
+        cursorStudy.moveToFirst();
+
+
+        while (!cursorStudy.isAfterLast()) {
+            if(word.equals(cursorStudy.getString(1)))
+                return true;
+            cursorStudy.moveToNext();
+        }
+        cursorStudy.close();
+        return false;
+
     }
 }
