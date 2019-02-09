@@ -19,4 +19,5 @@
     <string name="btnAddWordOnStudy">Добавить</string>
     <string name="toastAddWord">Слово Добавлено</string>
     <string name="ToastCheckForInsert">Такое слово уже есть</string>
+    <string name="toast_word_has_already_added">Cлово уже добавлено</string>
 </resources>

@@ -1,10 +1,17 @@
 package com.example.cheho.mydictionary;
 
+
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
@@ -54,31 +61,59 @@ public class Dictionary extends AppCompatActivity {
         return false;
 
     }
+    @SuppressLint("StaticFieldLeak")
     class DictionaryTask extends AsyncTask<Void, Void, Void>{
+        int imageDone = R.drawable.ic_action_check_word;
+        SimpleAdapter adapter;
+        HashMap<String, Object> word;
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(final Void aVoid) {
             super.onPostExecute(aVoid);
 
             String[] from = { "word",  "translation","image"};
             int[] to = { R.id.itemTvWord, R.id.itemTvTranslation,R.id.itemImg};
 
-            SimpleAdapter adapter = new SimpleAdapter(getApplicationContext(), words, R.layout.adapter_item, from, to);
-            ListView listView = findViewById(R.id.lvDictionary);
+            adapter= new SimpleAdapter(getApplicationContext(), words, R.layout.adapter_item, from, to);
+            final ListView listView = findViewById(R.id.lvDictionary);
+
             listView.setAdapter(adapter);
+            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.d("Listener", "itemClick: position = " + position + ", id = "+id);
+                    word = new HashMap<>();
+
+                    word.put("translation",  words.get(position).get("translation"));
+                    word.put("word",  words.get(position).get("word"));
+                    word.put("image",  imageDone);
+
+                    words.set(position,word);
+
+                    ListViewDialog listViewDialog = new ListViewDialog();
+                    listViewDialog.setParam(word,adapter);
+                    listViewDialog.show(getSupportFragmentManager(),"dialog");
+
+
+
+                    return false;
+                }
+            });
             progressBar.setVisibility(ProgressBar.INVISIBLE);
         }
+
 
         @Override
         protected Void doInBackground(Void... voids) {
 
 
-            HashMap<String, Object> word;
+
             Cursor cursor = mDb.rawQuery("SELECT * FROM words", null);
             cursor.moveToFirst();
             int img;
             while (!cursor.isAfterLast()) {
                 word = new HashMap<>();
-                int imageDone = R.drawable.ic_action_check_word;
+
                 word.put("translation",  cursor.getString(2));
                 word.put("word",  cursor.getString(1));
 
