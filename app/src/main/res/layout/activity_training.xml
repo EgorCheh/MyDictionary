@@ -49,6 +49,14 @@
 
         </LinearLayout>
 
+        <ImageButton
+            android:id="@+id/imButtHearing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_action_hearing"
+            tools:layout_editor_absoluteX="145dp"
+            tools:layout_editor_absoluteY="323dp" />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -7,40 +7,42 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cheho.myapplication.R;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Random;
 
 public class Training extends AppCompatActivity implements View.OnClickListener {
+
     private TextView tvTranslation;
-    private Button btnCheck;
     private EditText etWord;
     private SQLiteDatabase mDb;
-    private String word;
-    private Cursor cursor;
-    private int counterCorrectlyAnswer=0;
-    private final String KEY_INDEX = "randID";
     private TextToSpeech textToSpeech;
-    private String toSpeak;
+    private ArrayList<Word> words = new ArrayList<>();
     private Word currentWord;
+    private Random rand = new Random();
+    private String checkWord;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
+
         tvTranslation=findViewById(R.id.tvTranslationTraining);
-        btnCheck=findViewById(R.id.btnCheckTraining);
+        Button btnCheck = findViewById(R.id.btnCheckTraining);
         Button btnShowWord = findViewById(R.id.btnShowWordTraining);
         etWord=findViewById(R.id.etWordTraining);
-        String LOG_TAG = "myLogs";
-        Log.d(LOG_TAG,"_______ONCREATE________");
+        ImageButton imaButHearing = findViewById(R.id.imButtHearing);
+        imaButHearing.setOnClickListener(this);
         btnCheck.setOnClickListener(this);
         btnShowWord.setOnClickListener(this);
 
@@ -64,17 +66,19 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
         }
 
         mDb = mDBHelper.getWritableDatabase();
-
-        cursor = mDb.rawQuery("SELECT * FROM study", null);
-
-        if (savedInstanceState != null)
-        {
-            cursor.moveToPosition( savedInstanceState.getInt(KEY_INDEX,0));
-
-
+        Word currentWord;
+        Cursor cursor = mDb.rawQuery("SELECT * FROM study", null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            if(cursor.getInt(4)<1)
+            { currentWord = new Word(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3), cursor.getInt(4));
+            words.add(currentWord);}
+            cursor.moveToNext();
         }
-        else cursor.moveToFirst();
+        cursor.close();
+
         setNewWord();
+
 
     }
 
@@ -83,33 +87,33 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
         switch (view.getId()) {
             case R.id.btnCheckTraining:
 
-                if(word.equals(etWord.getText().toString()))
-                {
-                    textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH,null);
-                    counterCorrectlyAnswer++;
-                    Toast.makeText(getApplicationContext(), R.string.toastCorrectly, Toast.LENGTH_SHORT).show();
-                    if(counterCorrectlyAnswer==3)
-                    {
-                        ContentValues cv = new ContentValues();
-                        cv.put("studyLVL",currentWord.getLevel()+1);
-                        cv.put("counter",currentWord.getLevel()+1);
-                        mDb.update("study", cv, "_id=?", new String[]{currentWord.getIDToString()});
-                        counterCorrectlyAnswer=0;
-                        setNewWord();
-                    }
-                    else
-                    { Toast.makeText(getApplicationContext(), R.string.toastRepeat, Toast.LENGTH_SHORT).show();}
-                    etWord.setText("");
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), R.string.toastWrong, Toast.LENGTH_SHORT).show();
-                counterCorrectlyAnswer=0;
-                }
+               if(checkWord.equals(etWord.getText().toString())) {
+                   etWord.setText("");
+                   currentWord.successfulRepetition();
+                   if (currentWord.repetitionCompleted()){
+                       words.remove(currentWord);
+                       ContentValues cv = new ContentValues();
+                       cv.put("studyLVL",currentWord.getLevel()+1);
+                       cv.put("counter",currentWord.getLevel()+1);
+                       mDb.update("study", cv, "_id=?", new String[]{currentWord.getIDToString()});
+                   }
+                   else {
+                       Toast.makeText(getApplicationContext(),R.string.toastRepeat,Toast.LENGTH_LONG).show();
+                   }
+                   setNewWord();
+               }else {
+                   currentWord.unSuccessfulRepetition();
+                   Toast.makeText(getApplicationContext(),R.string.toastWrong,Toast.LENGTH_LONG).show();
+               }
+
+
                 break;
             case R.id.btnShowWordTraining:
-                Toast.makeText(getApplicationContext(), word, Toast.LENGTH_SHORT).show();
-                textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH,null);
-                counterCorrectlyAnswer=0;
+                Toast.makeText(getApplicationContext(), checkWord, Toast.LENGTH_SHORT).show();
+                currentWord.unSuccessfulRepetition();
+                break;
+            case R.id.imButtHearing:
+                textToSpeech.speak(currentWord.getWord(),TextToSpeech.QUEUE_FLUSH,null);
                 break;
 
             default:
@@ -120,40 +124,30 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
 
     private void  setNewWord()
     {
-        boolean notFoundWord=true;
-        while (!cursor.isAfterLast()&&notFoundWord) {
-
-             if(cursor.getInt(4)<1)
-            {
-              Log.d("Study",cursor.getString(1)+" "+cursor.getString(2)+" "+cursor.getString(3)+" "+cursor.getString(4));
-              word = cursor.getString(1);
-              tvTranslation.setText(cursor.getString(2));
-              toSpeak= word;
-              currentWord= new Word(cursor.getInt(0),cursor.getString(1),cursor.getString(2),cursor.getInt(3),cursor.getInt(4));
-               notFoundWord=false;
-            }
-            cursor.moveToNext();
-
-        }
-
-        if(notFoundWord)
+        if(!words.isEmpty())
         {
-            Toast.makeText(getApplicationContext(), R.string.toastTrainingEnd, Toast.LENGTH_SHORT).show();
-            btnCheck.setEnabled(false);
+            String [] allTranslation = {"rus","eng"};
+            String currentTranslation = allTranslation[rand.nextInt(allTranslation.length)];
+            currentWord = words.get(rand.nextInt(words.size()));
+
+            if (currentTranslation.equals("rus")) {
+                tvTranslation.setText(currentWord.getTranslation());
+                checkWord = currentWord.getWord();
+            }else {
+                tvTranslation.setText(currentWord.getWord());
+                checkWord=currentWord.getTranslation();
+            }
+
+          //  Log.d("Training",currentWord.toString());
+
+        }else {
+            Toast.makeText(getApplicationContext(),R.string.toastTrainingEnd,Toast.LENGTH_LONG).show();
+            etWord.setText("");
+            tvTranslation.setText("");
+            etWord.setEnabled(false);
         }
 
     }
-
-
-
-
-
-
-
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        int ID = cursor.getPosition();
-        savedInstanceState.putInt(KEY_INDEX, ID);    }
 
         public void onPause()
         {
