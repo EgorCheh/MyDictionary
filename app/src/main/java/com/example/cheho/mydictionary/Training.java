@@ -78,12 +78,11 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
 
         mDb = mDBHelper.getWritableDatabase();
         Word currentWord;
-        Cursor cursor = mDb.rawQuery("SELECT * FROM study", null);
+        Cursor cursor = mDb.rawQuery("SELECT * FROM study WHERE counter<1", null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            if(cursor.getInt(4)<1)
-            { currentWord = new Word(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3), cursor.getInt(4));
-            words.add(currentWord);}
+            currentWord = new Word(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3), cursor.getInt(4));
+            words.add(currentWord);
             cursor.moveToNext();
         }
         cursor.close();
