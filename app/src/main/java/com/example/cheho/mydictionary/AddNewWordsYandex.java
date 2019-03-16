@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -22,6 +23,7 @@ import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
@@ -45,6 +47,12 @@ public class AddNewWordsYandex extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_words_yandex);
+
+        Toolbar toolbar =findViewById(R.id.toolbarYandex);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_to_home);
 
         tvSetText=findViewById(R.id.tvSetText);
         etEngWord = findViewById(R.id.etEngWord);
@@ -214,5 +222,9 @@ public class AddNewWordsYandex extends AppCompatActivity  {
         Log.d(LOG_TAG,"_________No word");
         cursorCheck.close();
         return false;
+    }
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,6 +18,7 @@ import com.example.cheho.myapplication.R;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class StudyWords extends AppCompatActivity {
 
@@ -39,7 +41,11 @@ public class StudyWords extends AppCompatActivity {
         SQLiteDatabase mDb;
         mDb = mDBHelper.getWritableDatabase();
 
-
+        Toolbar toolbar =findViewById(R.id.toolbarStudy);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_to_home);
 
 
 
@@ -90,5 +96,9 @@ public class StudyWords extends AppCompatActivity {
                 return false;
             }
         });
+    }
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

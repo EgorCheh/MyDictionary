@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import com.example.cheho.myapplication.R;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClickListener {
@@ -35,6 +37,14 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_words);
+
+
+        Toolbar toolbar =findViewById(R.id.toolbarTop);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_to_home);
+
         tvTranslation=findViewById(R.id.tvTranslation);
         Button btnCheck = findViewById(R.id.btnCheck);
         Button btnShowWord = findViewById(R.id.btnShowWord);
@@ -162,5 +172,9 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
             textToSpeech.shutdown();
         }
         super.onPause();
+    }
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

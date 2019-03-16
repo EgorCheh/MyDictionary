@@ -7,10 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +21,7 @@ import com.example.cheho.myapplication.R;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
 
 public class Training extends AppCompatActivity implements View.OnClickListener {
@@ -31,6 +34,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
     private Word currentWord;
     private Random rand = new Random();
     private String checkWord;
+    private ImageView imViewSuccessfulTraining;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,13 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
         imaButHearing.setOnClickListener(this);
         btnCheck.setOnClickListener(this);
         btnShowWord.setOnClickListener(this);
+        imViewSuccessfulTraining = findViewById(R.id.imViewSuccTrain);
+
+        Toolbar toolbar =findViewById(R.id.toolbarTraining);
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_to_home);
 
 
         textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
@@ -145,6 +156,8 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
             etWord.setText("");
             tvTranslation.setText("");
             etWord.setEnabled(false);
+            imViewSuccessfulTraining.setImageResource(R.drawable.successful_training);
+
         }
 
     }
@@ -158,6 +171,9 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
             }
             super.onPause();
         }
-
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 
 }
