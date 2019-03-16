@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,22 +16,21 @@ import android.widget.Toast;
 import com.example.cheho.myapplication.R;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClickListener {
     private TextView tvTranslation;
     private EditText etWord;
     private SQLiteDatabase mDb;
-    private String word;
-    private Cursor cursor;
-    private final String LOG_TAG = "myLogs";
-    private int randID;
-    private final String KEY_INDEX = "randID";
+    private Random rand = new Random();
     private TextToSpeech textToSpeech;
-    private String toSpeak;
     private ContentValues cv;
+    private Word currentWord;
+    private ArrayList<Word> words = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,20 +73,17 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
         }
 
         mDb = mDBHelper.getWritableDatabase();
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if (savedInstanceState != null) {
-            randID = savedInstanceState.getInt(KEY_INDEX,0);
-            cursor = mDb.rawQuery("SELECT * FROM words", null);
-            cursor.moveToPosition(randID);
-            tvTranslation.setText(cursor.getString(2));
-            word = cursor.getString(1);
-        }else
-        setNewWord();
+        Cursor cursor = mDb.rawQuery("SELECT * FROM words WHERE word NOT IN (SELECT word FROM study)", null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
 
+            currentWord = new Word(cursor.getInt(0), cursor.getString(1), cursor.getString(2),0, 0);
+            words.add(currentWord);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        setNewWord();
     }
 
     @Override
@@ -96,22 +91,22 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
         switch (view.getId()) {
             case R.id.btnCheck:
 
-                if(word.equals(etWord.getText().toString()))
-                {textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH,null);
+                if(currentWord.getWord().equals(etWord.getText().toString()))
+                {
                     Toast.makeText(getApplicationContext(), R.string.toastCorrectly, Toast.LENGTH_SHORT).show();}
                 else {
                     Toast.makeText(getApplicationContext(), R.string.toastWrong, Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btnShowWord:
-                Toast.makeText(getApplicationContext(), word, Toast.LENGTH_SHORT).show();
-                textToSpeech.speak(toSpeak,TextToSpeech.QUEUE_FLUSH,null);
+                Toast.makeText(getApplicationContext(), currentWord.getWord(), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnNextWord:
                 setNewWord();
                 break;
             case R.id.buttAddWordTop:
-                mDb.insert("study", null, cv);
+                words.remove(currentWord);
+                mDb.insert("study", null, cv );
                 Toast.makeText(getApplicationContext(),R.string.toastAddWord,Toast.LENGTH_SHORT).show();
                 break;
                 default:
@@ -121,48 +116,13 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
 
 
     private void  setNewWord()
-    {   randID =(int)( 0 + Math.random()*4999);
-        Log.d(LOG_TAG, "_______"+randID+"______________" );
-
-        cursor = mDb.rawQuery("SELECT * FROM words", null);
-        cursor.moveToPosition(randID);
-
-        word = cursor.getString(1);
-
-        if(!checkHasWord())
-        {
+    {
+        currentWord = words.get(rand.nextInt(words.size()));
+        tvTranslation.setText(currentWord.getTranslation());
         cv = new ContentValues();
-        cv.put("word", cursor.getString(1));
-        cv.put("translation", cursor.getString(2));
-        toSpeak= word;
-        tvTranslation.setText(cursor.getString(2));
-        } else
-            setNewWord();
-
+        cv.put("word", currentWord.getWord());
+        cv.put("translation", currentWord.getTranslation());
     }
-
-   private boolean checkHasWord(){
-       Cursor cursorCheck = mDb.rawQuery("SELECT * FROM study", null);
-       cursorCheck.moveToFirst();
-
-
-       while (!cursorCheck.isAfterLast()) {
-           if(cursorCheck.getString(1).equals(word))
-           {
-               Log.d(LOG_TAG,"_________Has word");
-               cursorCheck.close();
-               return true;
-           }
-
-           cursorCheck.moveToNext();
-       }
-       Log.d(LOG_TAG,"_________No word");
-       cursorCheck.close();
-       return false;
-   }
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putInt(KEY_INDEX, randID);    }
 
     public void onPause()
     {
