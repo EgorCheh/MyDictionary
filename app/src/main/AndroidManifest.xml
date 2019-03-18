@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name="com.example.cheho.mydictionary.SearchImage"></activity>
         <activity android:name="com.example.cheho.mydictionary.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +23,7 @@
         <activity android:name="com.example.cheho.mydictionary.AddNewWordsTop5000" />
         <activity android:name="com.example.cheho.mydictionary.StudyWords" />
         <activity android:name="com.example.cheho.mydictionary.Training" />
-        <activity android:name="com.example.cheho.mydictionary.AddNewWordsYandex"></activity>
+        <activity android:name="com.example.cheho.mydictionary.AddNewWordsYandex" />
     </application>
 
 </manifest>
