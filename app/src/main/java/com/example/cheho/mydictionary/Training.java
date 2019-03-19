@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cheho.myapplication.R;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
     private Word currentWord;
     private Random rand = new Random();
     private String checkWord;
-    private ImageView imViewSuccessfulTraining;
+    private ImageView imViewTraining;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
         imaButHearing.setOnClickListener(this);
         btnCheck.setOnClickListener(this);
         btnShowWord.setOnClickListener(this);
-        imViewSuccessfulTraining = findViewById(R.id.imViewSuccTrain);
+        imViewTraining = findViewById(R.id.imViewTraning);
 
         Toolbar toolbar =findViewById(R.id.toolbarTraining);
         setSupportActionBar(toolbar);
@@ -82,6 +83,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             currentWord = new Word(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3), cursor.getInt(4));
+            currentWord.setURL( cursor.getString(5));
             words.add(currentWord);
             cursor.moveToNext();
         }
@@ -139,7 +141,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
             String [] allTranslation = {"rus","eng"};
             String currentTranslation = allTranslation[rand.nextInt(allTranslation.length)];
             currentWord = words.get(rand.nextInt(words.size()));
-
+            Picasso.get().load(currentWord.getURL()).into(imViewTraining);
             if (currentTranslation.equals("rus")) {
                 tvTranslation.setText(currentWord.getTranslation());
                 checkWord = currentWord.getWord();
@@ -155,7 +157,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
             etWord.setText("");
             tvTranslation.setText("");
             etWord.setEnabled(false);
-            imViewSuccessfulTraining.setImageResource(R.drawable.successful_training);
+            imViewTraining.setImageResource(R.drawable.successful_training);
 
         }
 
