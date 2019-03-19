@@ -31,6 +31,7 @@ public class SearchImage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_image);
+
         loadImages(1,"","all");
 
 
