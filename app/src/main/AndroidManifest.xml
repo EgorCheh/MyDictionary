@@ -19,6 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.example.cheho.mydictionary.DetailImageActivity" />
         <activity android:name="com.example.cheho.mydictionary.Dictionary" />
         <activity android:name="com.example.cheho.mydictionary.AddNewWordsTop5000" />
         <activity android:name="com.example.cheho.mydictionary.StudyWords" />

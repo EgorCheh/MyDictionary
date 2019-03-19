@@ -1,12 +1,14 @@
 package com.example.cheho.mydictionary;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -106,14 +108,27 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.buttAddWordTop:
                 words.remove(currentWord);
-                mDb.insert("study", null, cv );
-                Toast.makeText(getApplicationContext(),R.string.toastAddWord,Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, SearchImage.class);
+                intent.putExtra("translation", currentWord.getTranslation());
+                intent.putExtra("word", currentWord.getWord());
+                startActivityForResult(intent,1);
+
+
+
                 break;
                 default:
                 break;
         }
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {return;}
 
+
+        cv.put("URL",data.getStringExtra("URL"));
+        mDb.insert("study", null, cv );
+        Toast.makeText(getApplicationContext(),R.string.toastAddWord,Toast.LENGTH_SHORT).show();
+    }
 
     private void  setNewWord()
     {

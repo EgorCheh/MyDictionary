@@ -10,6 +10,12 @@ public class Word {
     private int counter;
     private int repetition = 0;
 
+    public String getURL() {return URL;}
+
+    public void setURL(String URL) {this.URL = URL;}
+
+    private String URL;
+
     Word(int id, String word, String translation, int level, int counter) {
         this.id = id;
         this.word = word;

@@ -75,8 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         saveDate();
 
-        Intent intent = new Intent(this, SearchImage.class);
-       startActivity(intent);
+
     }
 
 
