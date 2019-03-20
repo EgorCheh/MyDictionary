@@ -2,12 +2,15 @@ package com.example.cheho.mydictionary;
 
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.example.cheho.myapplication.R;
 
@@ -24,11 +28,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class Dictionary extends AppCompatActivity {
+public class Dictionary extends AppCompatActivity implements ListViewDialog.NoticeDialogListener {
 
     private SQLiteDatabase mDb;
     private ProgressBar progressBar;
+    private ContentValues cv = new ContentValues();
     private ArrayList<HashMap<String, Object>> words = new ArrayList<>();
+    private HashMap<String, Object> word;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +57,9 @@ public class Dictionary extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_to_home);
+
     }
+
 
 
     boolean haveWord (String word)
@@ -69,11 +77,30 @@ public class Dictionary extends AppCompatActivity {
         return false;
 
     }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Intent intent = new Intent(this, SearchImage.class);
+        intent.putExtra("translation", Objects.requireNonNull(word.get("translation")).toString());
+        intent.putExtra("word", Objects.requireNonNull(word.get("word")).toString());
+        startActivityForResult(intent,1);
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {return;}
+
+
+        cv.put("URL",data.getStringExtra("URL"));
+        mDb.insert("study", null, cv );
+        Toast.makeText(getApplicationContext(),R.string.toastAddWord,Toast.LENGTH_SHORT).show();
+    }
+
     @SuppressLint("StaticFieldLeak")
     class DictionaryTask extends AsyncTask<Void, Void, Void>{
         int imageDone = R.drawable.ic_action_check_word;
         SimpleAdapter adapter;
-        HashMap<String, Object> word;
+
         @Override
         protected void onPostExecute(final Void aVoid) {
             super.onPostExecute(aVoid);
@@ -97,18 +124,21 @@ public class Dictionary extends AppCompatActivity {
                     word.put("image",  imageDone);
 
                     words.set(position,word);
-
+                    cv.put("word", Objects.requireNonNull(word.get("word")).toString());
+                    cv.put("translation", Objects.requireNonNull(word.get("translation")).toString());
                     ListViewDialog listViewDialog = new ListViewDialog();
                     listViewDialog.setParam(word,adapter);
                     listViewDialog.show(getSupportFragmentManager(),"dialog");
 
 
-
                     return false;
                 }
             });
+
+
             progressBar.setVisibility(ProgressBar.INVISIBLE);
         }
+
 
 
         @Override
@@ -138,4 +168,7 @@ public class Dictionary extends AppCompatActivity {
         onBackPressed();
         return true;
     }
+
+
+
 }

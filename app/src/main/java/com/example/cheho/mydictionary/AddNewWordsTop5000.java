@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClickListener {
     private TextView tvTranslation;
@@ -128,6 +126,7 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
         cv.put("URL",data.getStringExtra("URL"));
         mDb.insert("study", null, cv );
         Toast.makeText(getApplicationContext(),R.string.toastAddWord,Toast.LENGTH_SHORT).show();
+        setNewWord();
     }
 
     private void  setNewWord()

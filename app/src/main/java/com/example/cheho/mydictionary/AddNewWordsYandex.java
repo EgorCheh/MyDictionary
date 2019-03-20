@@ -1,6 +1,7 @@
 package com.example.cheho.mydictionary;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -42,7 +43,7 @@ public class AddNewWordsYandex extends AppCompatActivity  {
     private Map<String, String> map;
     private TextView tvSetText;
     private SQLiteDatabase mDb;
-
+   private ContentValues cv = new ContentValues();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +94,7 @@ public class AddNewWordsYandex extends AppCompatActivity  {
         btnAddNewWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ContentValues cv = new ContentValues();
+
                if(etEngWord.getText().toString().equals(""))
                {
                 cv.put("word",tvSetText.getText().toString() );
@@ -106,8 +107,11 @@ public class AddNewWordsYandex extends AppCompatActivity  {
                     }
                 if(!checkHasWord(cv.get("word").toString()))
                 {
-                    mDb.insert("study", null, cv);
-                    Toast.makeText(getApplicationContext(),R.string.toastAddWord,Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(),SearchImage.class);
+                    intent.putExtra("translation", cv.get("translation").toString());
+                    intent.putExtra("word", cv.get("word").toString());
+                    startActivityForResult(intent,1);
+
                 }
                 else Toast.makeText(getApplicationContext(),getString(R.string.ToastCheckForInsert),Toast.LENGTH_SHORT).show();
 
@@ -146,11 +150,18 @@ public class AddNewWordsYandex extends AppCompatActivity  {
         }
 
         mDb = mDBHelper.getWritableDatabase();
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {return;}
+
+
+        cv.put("URL",data.getStringExtra("URL"));
+        mDb.insert("study", null, cv );
+        Toast.makeText(getApplicationContext(),R.string.toastAddWord,Toast.LENGTH_SHORT).show();
+        etEngWord.setText("");
+        etRusWord.setText("");
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.cheho.mydictionary;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -25,6 +26,27 @@ public class ListViewDialog extends DialogFragment {
     private SimpleAdapter simpleAdapter;
 
 
+    public interface NoticeDialogListener {
+         void onDialogPositiveClick(DialogFragment dialog);
+    }
+
+    NoticeDialogListener mListener;
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+
+            mListener = (NoticeDialogListener) activity;
+        } catch (ClassCastException e) {
+
+            throw new ClassCastException(activity.toString()
+                    + " must implement NoticeDialogListener");
+        }
+    }
+
 
     @NonNull
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -37,14 +59,11 @@ public class ListViewDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        DatabaseHelper mDBHelper = new DatabaseHelper(getContext());
-                        SQLiteDatabase mDb = mDBHelper.getWritableDatabase();
-
                         Log.d("Dialog","Positive");
                         if(!checkHasWord())
                         {
-                            mDb.insert("study", null, contentValues);
                             simpleAdapter.notifyDataSetChanged();
+                            mListener.onDialogPositiveClick(ListViewDialog.this);
 
                         }
                         else Toast.makeText(getContext(), getString(R.string.toast_word_has_already_added),Toast.LENGTH_SHORT).show();
@@ -57,6 +76,7 @@ public class ListViewDialog extends DialogFragment {
                     }
                 })
                 .create();
+
 
 }
 
