@@ -11,7 +11,9 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.example.cheho.myapplication.R;
 
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnOpenYandex = findViewById(R.id.btnOpenYandex);
         btnOpenYandex.setOnClickListener(this);
         DatabaseHelper mDBHelper = new DatabaseHelper(this);
+
+
 
         try {
             mDBHelper.updateDataBase();
