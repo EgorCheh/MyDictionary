@@ -42,14 +42,14 @@ public class SearchImage extends AppCompatActivity {
             @Override
             public void onResponse(Call<PixabayImageList> call, Response<PixabayImageList> response) {
 
-                Log.d("adsasdasd","Successful "+response.body().toString());
+
                 collectURLs(response.body().getHits());
 
             }
 
             @Override
             public void onFailure(Call<PixabayImageList> call, Throwable t) {
-                Log.d("adsasdasd","throwable "+t.getMessage());
+
 
             }
 
@@ -61,7 +61,7 @@ public class SearchImage extends AppCompatActivity {
         for (PixabayImage item:list)
         imageUrls.add(item.getWebformatURL());
 
-        Log.d("adsasdasd","size= "+imageUrls.size() );
+
 
         GridView gridView =  findViewById(R.id.grid_view);
 
@@ -70,7 +70,7 @@ public class SearchImage extends AppCompatActivity {
         display.getSize(p);
         int width = p.x;
         int height = p.y;
-        Log.d("adsasdasd","width = "+width+"  height = "+height );
+
         gridView.setAdapter(new ImageAdapter(this,imageUrls,width,height));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

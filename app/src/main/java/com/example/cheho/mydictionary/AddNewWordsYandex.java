@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -18,32 +18,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cheho.myapplication.R;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AddNewWordsYandex extends AppCompatActivity  {
 
     final String LOG_TAG = "myLogs";
     private Button btnAddNewWord;
     private EditText etEngWord,etRusWord;
-    private Gson gson = new GsonBuilder().create();
-    private RequestAPI req;
     private String text,lang;
-    private Map<String, String> map;
     private TextView tvSetText;
     private SQLiteDatabase mDb;
-   private ContentValues cv = new ContentValues();
+    private ContentValues cv = new ContentValues();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,16 +122,12 @@ public class AddNewWordsYandex extends AppCompatActivity  {
                 }else {Toast.makeText(getApplicationContext(),"Fail",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                MyTask mt = new MyTask();
-                mt.execute();
+            translation();
+
             }
         });
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://translate.yandex.net")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        req = retrofit.create(RequestAPI.class);
+
 
         DatabaseHelper mDBHelper = new DatabaseHelper(this);
 
@@ -151,6 +139,28 @@ public class AddNewWordsYandex extends AppCompatActivity  {
 
         mDb = mDBHelper.getWritableDatabase();
 
+
+
+
+
+
+    }
+
+    void translation(){
+        YandexTranslateService.createYandexTranslateService().translate(getString(R.string.Yandex_API_KEY),text,lang).enqueue(new Callback<YandexResponse>(){
+            @Override
+            public void onResponse(@NonNull Call<YandexResponse> call, @NonNull Response<YandexResponse> response) {
+
+                assert response.body() != null;
+                tvSetText.setText(response.body().getText().toString().substring(1,response.body().getText().toString().length()-1));
+                btnAddNewWord.setEnabled(true);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<YandexResponse> call, @NonNull Throwable t) {
+
+            }
+        });
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -165,55 +175,6 @@ public class AddNewWordsYandex extends AppCompatActivity  {
     }
 
 
-    class MyTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-
-
-                Map<String, String> mapJson = new HashMap<>();
-                String KEY = "trnsl.1.1.20180723T103924Z.4e5559e0a3b45ee4.800a777f9ceb4003f58fd2bc387d15bddeffd2fe";
-                mapJson.put("key", KEY);
-                mapJson.put("text", text);
-                mapJson.put("lang", lang);
-
-                final Call<Object> call = req.RUS(mapJson);
-
-                Response<Object> response = call.execute();
-
-
-                map = gson.fromJson(response.body().toString(), Map.class);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            for (Map.Entry e : map.entrySet()) {
-                Log.d("Yandex", " Key " + e.getKey() + "  Value " + e.getValue());
-                if(e.getKey().toString().equals("text"))
-                {
-                    tvSetText.setText(e.getValue().toString().substring(1,e.getValue().toString().length()-1));
-                    btnAddNewWord.setEnabled(true);
-                }
-            }
-
-        }
-
-
-    }
 
     private boolean checkHasWord(String word){
         Cursor cursorCheck = mDb.rawQuery("SELECT * FROM study", null);

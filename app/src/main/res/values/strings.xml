@@ -22,5 +22,6 @@
     <string name="toast_word_has_already_added">Cлово уже добавлено</string>
     <string name="toast_delete_word">Слово удалено</string>
     <string name="PIXABAY_API_KEY">11905055-1766faa9de91d6e2edcd2e672</string>
+    <string name="Yandex_API_KEY">trnsl.1.1.20180723T103924Z.4e5559e0a3b45ee4.800a777f9ceb4003f58fd2bc387d15bddeffd2fe</string>
     <string name="tv_q_set_image">Установить изображение ?</string>
 </resources>
