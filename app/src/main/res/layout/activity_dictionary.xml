@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context="com.example.cheho.mydictionary.MainActivity">
 
     <LinearLayout
@@ -15,41 +16,51 @@
             android:id="@+id/toolbarDict"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
+            android:background="@drawable/tool_bar_color"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="monospace"
+                android:text="@string/btnOpenDictionary"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp" />
+        </android.support.v7.widget.Toolbar>
 
         <ListView
             android:id="@+id/lvDictionary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:drawable/screen_background_dark_transparent"
             app:layout_constraintTop_toBottomOf="@+id/toolbarDict" />
     </LinearLayout>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.35" />
 
     <ProgressBar
         android:id="@+id/progressBarDictionary"
-        android:indeterminateDrawable="@drawable/pinner_png"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:indeterminateDrawable="@drawable/pinner_png"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2"
-        />
+        app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline3"

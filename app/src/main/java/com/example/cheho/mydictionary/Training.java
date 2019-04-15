@@ -157,7 +157,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
             etWord.setText("");
             tvTranslation.setText("");
             etWord.setEnabled(false);
-            imViewTraining.setImageResource(R.drawable.successful_training);
+
 
         }
 
