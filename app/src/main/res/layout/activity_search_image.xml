@@ -3,10 +3,7 @@
     android:id="@+id/grid_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:numColumns="2"
-    android:verticalSpacing="2dp"
+    android:background="@drawable/background"
     android:horizontalSpacing="2dp"
-    android:background="@color/colorBackgroundGrid"
-     >
-
-</GridView>
+    android:numColumns="2"
+    android:verticalSpacing="2dp" />

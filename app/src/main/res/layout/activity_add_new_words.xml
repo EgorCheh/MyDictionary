@@ -4,37 +4,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context="com.example.cheho.mydictionary.AddNewWordsTop5000">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbarTop"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorToolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tvTranslation"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="130dp"
-            android:gravity="center"
-            android:padding="5dp"
-            android:textSize="24sp" />
+            android:layout_gravity="center"
+            android:fontFamily="monospace"
+            android:text="@string/btnOpenNewWords"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp" />
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/tvTranslation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="monospace"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textColor="@android:color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        tools:layout_editor_absoluteX="0dp">
 
         <EditText
             android:id="@+id/etWord"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:ems="10"
+            android:gravity="center"
+            android:hint="@string/et_check_yourself"
             android:inputType="textPersonName" />
 
         <LinearLayout
@@ -46,16 +73,31 @@
                 android:id="@+id/btnShowWord"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="2dp"
                 android:layout_weight="1"
-                android:padding="5dp"
-                android:text="@string/btnShowWord" />
+                android:background="@drawable/background_button"
+                android:drawableStart="@drawable/ic_action_forgot"
+                android:fontFamily="monospace"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/btnShowWord"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/btnCheck"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="@string/btnCheck" />
+                android:background="@drawable/background_button"
+                android:drawableStart="@drawable/ic_action_cheh_words"
+                android:fontFamily="monospace"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/btnCheck"
+                android:textColor="@android:color/white" />
 
         </LinearLayout>
 
@@ -63,15 +105,45 @@
             android:id="@+id/btnNextWord"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/background_button"
+            android:drawableStart="@drawable/ic_action_next_word"
+            android:fontFamily="monospace"
             android:padding="5dp"
-            android:text="@string/btnNextWord" />
+            android:text="@string/btnNextWord"
+            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/buttAddWordTop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btnOpenYandex" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/background_button"
+            android:drawableStart="@drawable/ic_action_add_word"
+            android:fontFamily="monospace"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/btnOpenYandex"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.7" />
 
 </android.support.constraint.ConstraintLayout>

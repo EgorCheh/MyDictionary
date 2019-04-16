@@ -46,6 +46,7 @@ public class AddNewWordsYandex extends AppCompatActivity  {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_to_home);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         tvSetText=findViewById(R.id.tvSetText);
         etEngWord = findViewById(R.id.etEngWord);

@@ -18,27 +18,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imageViewMain"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:contentDescription="TODO"
-                app:layout_constraintBottom_toTopOf="@+id/btnOpenYandex"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/logo_my_dictionary" />
-
             <Button
                 android:id="@+id/btnOpenYandex"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/background_button"
                 android:drawableStart="@drawable/ic_action_add_word"
                 android:drawableEnd="@drawable/ic_action_arrow_for_button"
@@ -49,16 +36,17 @@
                 android:textColor="@color/colorWhite"
                 app:layout_constraintBottom_toTopOf="@+id/btnOpenTraining"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.486"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <Button
                 android:id="@+id/btnOpenTraining"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/background_button"
                 android:drawableStart="@drawable/ic_action_training"
                 android:drawableEnd="@drawable/ic_action_arrow_for_button"
@@ -76,9 +64,11 @@
                 android:id="@+id/btnOpenStudy"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/background_button"
                 android:drawableStart="@drawable/ic_action_study"
                 android:drawableEnd="@drawable/ic_action_arrow_for_button"
@@ -87,18 +77,19 @@
                 android:paddingEnd="10dp"
                 android:text="@string/btnOpenStudy"
                 android:textColor="@android:color/white"
-                app:layout_constraintBottom_toTopOf="@+id/btnOpenNewWords"
+                app:layout_constraintBottom_toTopOf="@+id/guideline5"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
             <Button
                 android:id="@+id/btnOpenNewWords"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="30dp"
                 android:background="@drawable/background_button"
                 android:drawableStart="@drawable/ic_action_add_word"
                 android:drawableEnd="@drawable/ic_action_arrow_for_button"
@@ -107,17 +98,19 @@
                 android:paddingEnd="10dp"
                 android:text="@string/btnOpenNewWords"
                 android:textColor="@android:color/white"
-                app:layout_constraintBottom_toTopOf="@+id/btnOpenDictionary"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnOpenStudy" />
 
             <Button
                 android:id="@+id/btnOpenDictionary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="88dp"
                 android:background="@drawable/background_button"
                 android:drawableStart="@drawable/ic_action_top_words"
                 android:drawableEnd="@drawable/ic_action_arrow_for_button"
@@ -126,10 +119,48 @@
                 android:paddingEnd="10dp"
                 android:text="@string/btnOpenDictionary"
                 android:textColor="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnOpenNewWords" />
+
+            <TextView
+                android:id="@+id/tvMainLogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/aguafina_script"
+                android:gravity="center"
+                android:text="@string/app_name"
+                android:textColor="@android:color/white"
+                android:textSize="58sp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.496"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.35" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.85" />
+
+            <android.support.constraint.Group
+                android:id="@+id/group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
         </android.support.constraint.ConstraintLayout>
 

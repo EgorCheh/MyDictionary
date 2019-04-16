@@ -4,11 +4,14 @@ package com.example.cheho.mydictionary;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -46,7 +49,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
         Button btnCheck = findViewById(R.id.btnCheckTraining);
         Button btnShowWord = findViewById(R.id.btnShowWordTraining);
         etWord=findViewById(R.id.etWordTraining);
-        ImageButton imaButHearing = findViewById(R.id.imButtHearing);
+        Button imaButHearing = findViewById(R.id.imButtHearing);
         imaButHearing.setOnClickListener(this);
         btnCheck.setOnClickListener(this);
         btnShowWord.setOnClickListener(this);
@@ -57,7 +60,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_to_home);
-
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
@@ -141,7 +144,12 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
             String [] allTranslation = {"rus","eng"};
             String currentTranslation = allTranslation[rand.nextInt(allTranslation.length)];
             currentWord = words.get(rand.nextInt(words.size()));
-            Picasso.get().load(currentWord.getURL()).into(imViewTraining);
+            Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+            Point p = new Point();
+            display.getSize(p);
+            int width = p.x;
+            int height = p.y;
+            Picasso.get().load(currentWord.getURL()).resize(height/3,width/3).into(imViewTraining);
             if (currentTranslation.equals("rus")) {
                 tvTranslation.setText(currentWord.getTranslation());
                 checkWord = currentWord.getWord();

@@ -41,6 +41,7 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_to_home);
 
         tvTranslation=findViewById(R.id.tvTranslation);
