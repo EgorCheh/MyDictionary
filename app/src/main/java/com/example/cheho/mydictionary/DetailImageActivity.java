@@ -43,7 +43,7 @@ public class DetailImageActivity extends AppCompatActivity implements View.OnCli
 
                 break;
             case R.id.butNotDetalActiv:
-
+                finish();
                 break;
             default:
                 break;
