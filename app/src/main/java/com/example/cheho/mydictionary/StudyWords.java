@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import com.example.cheho.myapplication.R;
 
@@ -100,6 +101,13 @@ public class StudyWords extends AppCompatActivity {
     }
     public boolean onSupportNavigateUp() {
         onBackPressed();
+        overridePendingTransition(R.anim.open_main_activity,R.anim.back_main_activity);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.open_main_activity,R.anim.back_main_activity);
     }
 }

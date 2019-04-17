@@ -182,7 +182,14 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
         }
     public boolean onSupportNavigateUp() {
         onBackPressed();
+        overridePendingTransition(R.anim.open_main_activity,R.anim.back_main_activity);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.open_main_activity,R.anim.back_main_activity);
     }
 
 }
