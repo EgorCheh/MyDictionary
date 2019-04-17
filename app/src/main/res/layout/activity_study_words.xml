@@ -24,7 +24,7 @@
             android:id="@+id/toolbarStudy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorToolbar"
+            android:background="@drawable/tool_bar_color"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme">
 

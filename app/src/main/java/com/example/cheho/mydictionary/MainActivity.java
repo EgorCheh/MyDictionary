@@ -91,22 +91,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 Intent intent = new Intent(this, Dictionary.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.start_new_activity_from_main,R.anim.close_main_activity);
                 break;
             case R.id.btnOpenNewWords:
                 intent = new Intent(this, AddNewWordsTop5000.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.start_new_activity_from_main,R.anim.close_main_activity);
                 break;
             case R.id.btnOpenStudy:
                 intent = new Intent(this, StudyWords.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.start_new_activity_from_main,R.anim.close_main_activity);
                 break;
             case R.id.btnOpenTraining:
                 intent = new Intent(this, Training.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.start_new_activity_from_main,R.anim.close_main_activity);
                 break;
             case R.id.btnOpenYandex:
                 intent = new Intent(this, AddNewWordsYandex.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.start_new_activity_from_main,R.anim.close_main_activity);
                 break;
             default:
                 break;
