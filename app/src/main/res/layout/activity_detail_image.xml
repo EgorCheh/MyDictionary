@@ -12,13 +12,17 @@
 
     <ImageView
         android:id="@+id/imViewDetalImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_weight="0.1"
+        android:transitionName="imageTrans"
+        app:layout_constraintBottom_toTopOf="@+id/guideline11"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txQesSetImage" />
 
@@ -27,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
+        android:layout_marginTop="8dp"
         android:layout_weight="1"
         android:fontFamily="monospace"
         android:gravity="center"
@@ -34,13 +39,15 @@
         android:textColor="@android:color/white"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:layout_weight="1"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/imViewDetalImage"
@@ -76,5 +83,12 @@
             android:text="Да"
             android:textColor="@android:color/white" />
     </LinearLayout>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.7" />
 
 </android.support.constraint.ConstraintLayout>

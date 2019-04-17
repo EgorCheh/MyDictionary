@@ -1,9 +1,14 @@
 package com.example.cheho.mydictionary;
 
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
@@ -73,11 +78,23 @@ public class SearchImage extends AppCompatActivity {
 
         gridView.setAdapter(new ImageAdapter(this,imageUrls,width,height));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getApplicationContext(), DetailImageActivity.class);
+                view.setTransitionName("imageTrans");
+
+
+                Intent intent = new Intent(SearchImage.this, DetailImageActivity.class);
+
+
+
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(SearchImage.this,
+                                view,
+                                ViewCompat.getTransitionName(view));
+
                 intent.putExtra("URL", imageUrls.get(i));
-                startActivityForResult(intent,1);
+                startActivityForResult(intent,1,options.toBundle());
 
             }
         });
