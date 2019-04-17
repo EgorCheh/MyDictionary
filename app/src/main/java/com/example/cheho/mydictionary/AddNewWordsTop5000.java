@@ -9,6 +9,8 @@ import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,6 +33,7 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
     private ContentValues cv;
     private Word currentWord;
     private ArrayList<Word> words = new ArrayList<>();
+    private Animation animOut,animIn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,9 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
         btnNextWord.setOnClickListener(this);
         btnCheck.setOnClickListener(this);
         btnShowWord.setOnClickListener(this);
+
+         animOut = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
+         animIn = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
 
         textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
@@ -83,7 +89,22 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
             cursor.moveToNext();
         }
         cursor.close();
+        animOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
 
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                setNewWord();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         setNewWord();
     }
 
@@ -103,7 +124,12 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
                 Toast.makeText(getApplicationContext(), currentWord.getWord(), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnNextWord:
-                setNewWord();
+
+                tvTranslation.startAnimation(animOut);
+
+
+
+
                 break;
             case R.id.buttAddWordTop:
                 words.remove(currentWord);
@@ -134,6 +160,8 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
     {
         currentWord = words.get(rand.nextInt(words.size()));
         tvTranslation.setText(currentWord.getTranslation());
+
+        tvTranslation.startAnimation(animIn);
         cv = new ContentValues();
         cv.put("word", currentWord.getWord());
         cv.put("translation", currentWord.getTranslation());

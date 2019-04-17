@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -39,6 +41,7 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
     private Random rand = new Random();
     private String checkWord;
     private ImageView imViewTraining;
+    private Animation animOut,animIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,9 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
             throw new Error("UnableToUpdateDatabase");
         }
 
+        animOut = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
+        animIn = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
+
         mDb = mDBHelper.getWritableDatabase();
         Word currentWord;
         Cursor cursor = mDb.rawQuery("SELECT * FROM study WHERE counter<1", null);
@@ -91,7 +97,22 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
             cursor.moveToNext();
         }
         cursor.close();
+        animOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
 
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                setNewWord();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         setNewWord();
 
 
@@ -115,7 +136,8 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
                    else {
                        Toast.makeText(getApplicationContext(),R.string.toastRepeat,Toast.LENGTH_LONG).show();
                    }
-                   setNewWord();
+                   tvTranslation.startAnimation(animOut);
+                   imViewTraining.startAnimation(animOut);
                }else {
                    currentWord.unSuccessfulRepetition();
                    Toast.makeText(getApplicationContext(),R.string.toastWrong,Toast.LENGTH_LONG).show();
@@ -157,7 +179,8 @@ public class Training extends AppCompatActivity implements View.OnClickListener 
                 tvTranslation.setText(currentWord.getWord());
                 checkWord=currentWord.getTranslation();
             }
-
+            tvTranslation.startAnimation(animIn);
+            imViewTraining.startAnimation(animIn);
           //  Log.d("Training",currentWord.toString());
 
         }else {

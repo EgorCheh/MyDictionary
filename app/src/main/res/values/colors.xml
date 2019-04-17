@@ -5,4 +5,5 @@
     <color name="colorAccent">#424242</color>
     <color name="colorBackgroundGrid">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorClick">#27FFFFFF</color>
 </resources>
