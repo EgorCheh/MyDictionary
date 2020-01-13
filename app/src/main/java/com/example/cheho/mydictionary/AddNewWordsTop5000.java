@@ -4,10 +4,13 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -19,6 +22,9 @@ import android.widget.Toast;
 import com.example.cheho.myapplication.R;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
@@ -149,6 +155,11 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {return;}
 
+        try {
+            ImagesUploader imagesUploader = new ImagesUploader(data.getStringExtra("URL"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         cv.put("URL",data.getStringExtra("URL"));
         mDb.insert("study", null, cv );
@@ -187,4 +198,5 @@ public class AddNewWordsTop5000 extends AppCompatActivity implements View.OnClic
         super.onBackPressed();
         overridePendingTransition(R.anim.open_main_activity,R.anim.back_main_activity);
     }
+
 }

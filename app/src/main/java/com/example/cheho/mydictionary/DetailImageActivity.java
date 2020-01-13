@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso;
 public class DetailImageActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView detailImageView;
-    Intent intent;
+    private Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cheho.myapplication.R;
@@ -38,6 +39,8 @@ public class SearchImage extends AppCompatActivity {
         Intent intent = getIntent();
         loadImages(1,intent.getStringExtra("translation"),"all","ru");
         loadImages(1,intent.getStringExtra("word"),"all","en");
+        TextView textView = findViewById(R.id.tv_wanted_word);
+        textView.setText(intent.getStringExtra("word")+"\n"+intent.getStringExtra("translation"));
 
     }
    private void loadImages(int page, String query, String currentOrientation,String lang) {
